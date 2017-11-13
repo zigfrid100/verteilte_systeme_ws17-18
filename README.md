@@ -14,6 +14,11 @@ die aktuell vorhandene Menge eines einzelnen Artikels, wie auch die Historie des
 
 ## For Compile and Start: 
 
+```
+$ git clone -b step1 https://github.com/zigfrid100/verteilte_systeme_ws17-18.git
+```
+* Don't forget change IP-Address by Client 
+
 ## Compile
 ```
 $ mvn clean package 
