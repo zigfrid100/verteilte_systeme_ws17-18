@@ -21,6 +21,9 @@ public class UDPSocketClient {
     private InetAddress address;
     /** A buffer array to store the datagram information. */
     private byte[] buf = new byte[1024];
+    /** InetAdress String */
+    private String ipAddresString = "192.168.178.39";
+    private String ipAddresLocalhostString = "localhost";
 
     /**
      * Default constructor that creates, i.e., opens
@@ -29,7 +32,7 @@ public class UDPSocketClient {
      * @throws IOException In case the socket cannot be created.
      */
     public UDPSocketClient() throws IOException {
-        address = InetAddress.getByName("localhost");
+        address = InetAddress.getByName(ipAddresLocalhostString);
         udpSocket = new DatagramSocket();
         System.out.println("Started the UDP socket that connects to " + address.getHostAddress());
     }
