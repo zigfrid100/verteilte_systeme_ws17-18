@@ -18,15 +18,17 @@ import java.io.IOException;
 
 public class Main {
 
+    /**
+     * for test -> true
+     * for normal -> false
+     **/
+    final static boolean HELPFORTEST = false;
+    final static int TESTMENGE = 1000000;
+
     public static void main(String[] args) throws IOException, InterruptedException{
 
         int choice;
         String packetsToSend;
-        /**
-         * for test -> true
-         * for normal -> false
-         **/
-        boolean helpForTest = false;
 
         // Display menu graphics
         System.out.println("============================");
@@ -49,8 +51,8 @@ public class Main {
                     try {
                         udpSocketServer = new UDPSocketServer();
                         /** for test */
-                        if(helpForTest) {
-                            udpSocketServer.helpForTest = helpForTest;
+                        if(HELPFORTEST) {
+                            udpSocketServer.helpForTest = HELPFORTEST;
                         }
                     } catch (IOException e) {
                         System.out.println("Could not start UDP Socket Server.\n" + e.getLocalizedMessage());
@@ -71,8 +73,8 @@ public class Main {
                     /** The Product Object. */
                     Product myProduct = new Product();
                     /** for test */
-                    if(helpForTest){
-                        myProduct.setValueOfProduct(1000000);
+                    if(HELPFORTEST){
+                        myProduct.setValueOfProduct(TESTMENGE);
                         packetsToSend = "" + myProduct.getValueOfProduct();
                     }else{
                         packetsToSend = "" + myProduct.getValueOfProduct();
@@ -99,7 +101,7 @@ public class Main {
                             udpSocketClient.sendMsg(myProduct);
                             myProduct.reduce();
                             /** for test */
-                            if(!helpForTest){
+                            if(!HELPFORTEST){
                                 Thread.sleep(2000);
                             }
                         }
