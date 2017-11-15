@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public class Product implements Serializable{
 
-    static String[] prodacts = {"Tomaten","Gurken","Zwibeln","Wurst","Kaese","Zuker","Wasser","Karotten","Milch", "Soja",
+    static String[] prodacts = {"Tomaten","Gurken","Zwibeln","Wurst","Käse","Zuker","Wasser","Karotten","Milch", "Soja",
             "Kartoffeln","Kohl","Rettich","Hänchen","Rind","Salz","Paprika","Fisch","Butter","Schmand"};
 
 

@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.io.*;
+import java.net.*;
 
 /**
  * Created by zigfrid on 13.11.17.
@@ -21,9 +22,11 @@ public class UDPSocketClient {
     private InetAddress address;
     /** A buffer array to store the datagram information. */
     private byte[] buf = new byte[1024];
+    private byte[] incomingData = new byte[1024];
     /** InetAdress String */
-    private String ipAddresString = "192.168.178.39";
+    private String ipAddresString = "141.100.42.159";
     private String ipAddresLocalhostString = "localhost";
+    private String answerFromServer;
 
     /**
      * Default constructor that creates, i.e., opens
@@ -50,14 +53,31 @@ public class UDPSocketClient {
         // Convert the message into a byte-array.
         buf = bStream.toByteArray();
         // Create a new UDP packet with the byte-array as payload.
-        DatagramPacket packet  = new DatagramPacket(buf, buf.length, address, PORT);
+        DatagramPacket sendPacket  = new DatagramPacket(buf, buf.length, address, PORT);
+        DatagramPacket incomingPacket = new DatagramPacket(incomingData,incomingData.length);
         // Send the data.
         try {
-            udpSocket.send(packet);
+            //send the packet on server
+            udpSocket.send(sendPacket);
+
+            //check if server available
+            udpSocket.setSoTimeout(5000);
+            udpSocket.receive(incomingPacket);
+            //write answer counter
+            this.answerFromServer = new String(incomingPacket.getData());
+
             System.out.println("Message sent with payload: " + product.toPrint());
+        }  catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (SocketException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("Could not send data.\n" + e.getLocalizedMessage());
         }
+    }
+
+    public String getAnswerFromServer(){
+        return answerFromServer;
     }
 
 }

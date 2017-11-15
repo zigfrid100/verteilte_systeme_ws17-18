@@ -23,10 +23,15 @@ public class UDPSocketServer {
     private boolean running = true;
     /** A buffer array to store the datagram information. */
     private byte[] buf = new byte[1024];
+    private byte[] data = new byte[1024];
     /** SensorData List (all Data) */
     private List<SensorData> sensorDatas = new ArrayList<SensorData>();
     /** SensorData List (all Data) */
     private static List<SensorData> actualSensorDatas = new ArrayList<SensorData>();
+    /** counter for received packets */
+    private int receivedPacketsCounter = 0;
+    /** for test */
+    public boolean helpForTest = true;
 
     /**
      * Default constructor that creates, i.e., opens
@@ -58,6 +63,20 @@ public class UDPSocketServer {
         }
     }
 
+    private void sendAnswer(SensorData sensorData) throws IOException{
+
+        /** The IP address and port from client . */
+        InetAddress address = sensorData.getAddress();
+        int port = sensorData.getPortNummber();
+        //increment for check
+        String message = " " + receivedPacketsCounter;
+        data = message.getBytes();
+        DatagramPacket sendPacket  = new DatagramPacket(data, data.length, address, port);
+        udpSocket.send(sendPacket);
+        ++receivedPacketsCounter;
+
+    }
+
     /**
      * Extracts some data of a given datagram packet
      * and save.
@@ -75,6 +94,7 @@ public class UDPSocketServer {
         try {
             Product product = (Product)iStream.readObject();
             saveSensorData(address,port,product,length);
+            sendAnswer(new SensorData(product,port,address,length));
             iStream.close();
             //printPacketData(address,port,length,product);
         } catch (ClassNotFoundException e) {
@@ -99,8 +119,12 @@ public class UDPSocketServer {
         for (SensorData sensorData : actualSensorDatas) {
             System.out.println("Received a packet: IP:Port: " + sensorData.printSensorData());
         }
-        Thread.sleep(2000);
-        System.out.print("\033[H\033[2J");
+        /** for test */
+        if(!helpForTest){
+            Thread.sleep(2000);
+            System.out.print("\033[H\033[2J");
+        }
+
     }
 
     /**
