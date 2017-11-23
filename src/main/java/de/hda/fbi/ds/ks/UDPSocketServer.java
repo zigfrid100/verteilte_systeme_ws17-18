@@ -30,8 +30,6 @@ public class UDPSocketServer {
     private static List<SensorData> actualSensorDatas = new ArrayList<SensorData>();
     /** counter for received packets */
     private int receivedPacketsCounter = 0;
-    /** for test */
-    public boolean helpForTest = true;
 
     /**
      * Default constructor that creates, i.e., opens
@@ -119,11 +117,8 @@ public class UDPSocketServer {
         for (SensorData sensorData : actualSensorDatas) {
             System.out.println("Received a packet: IP:Port: " + sensorData.printSensorData());
         }
-        /** for test */
-        if(!helpForTest){
             Thread.sleep(2000);
             System.out.print("\033[H\033[2J");
-        }
 
     }
 
