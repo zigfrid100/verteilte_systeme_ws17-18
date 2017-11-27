@@ -103,6 +103,7 @@ public class UDPSocketServer {
         String historyURL = "/history";
         String listURL = "/list";
         String testBadURL = "/testError";
+        String pathForRefresh = "";
         String topic ="";
         //For test Status
         String httpStatus = "";
@@ -119,17 +120,20 @@ public class UDPSocketServer {
                     message = makeOneStringHistory();
                     httpStatus = "HTTP/1.1 200";
                     topic = "History of products : ";
+                    pathForRefresh = historyURL;
                 }
                 if(path.equals(listURL)){
                     message = makeOneStringList();
                     httpStatus = "HTTP/1.1 200";
                     topic = "List of products : ";
+                    pathForRefresh = listURL;
                 }
                 /** if path not equals /list or /history will be BAD REQUEST with status 400 */
                 if(!path.equals(listURL) && !path.equals(historyURL)){
                     message = "<h1 style='color:red'style='color:red'> BAD REQUEST, ALLOWED ONLY HTTP GET /list or /history REQUESTS </h1>";
                     httpStatus = "HTTP/1.1 400";
                     topic = "<h1 style='color:red'> ERROR </h1>";
+                    pathForRefresh = testBadURL;
                 }
 
             }
@@ -139,8 +143,8 @@ public class UDPSocketServer {
             out.println("Content-type: text/html");
             out.println("Server-name: myServer");
             response = "<html>" + "<head>"
-                    + "<meta http-equiv='refresh' content='1'/>"
-                    + "<meta charset='utf-8'/>" // Umlauts
+                    + "<meta http-equiv='refresh' content='2'; url=localhost:8282" + pathForRefresh + ">"
+                    + "<meta charset='utf-8'>" // Umlauts
                     + "<link rel=\"icon\" href=\"data:;base64,iVBORw0KGgo=\">" // How to prevent favicon.ico requests?
                     + "<title>My Web Server</title></head>"
                     + "<h1>Your request: " + request + "</h3>"

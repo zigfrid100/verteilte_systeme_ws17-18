@@ -1,14 +1,12 @@
-# Aufgabe 1
-_Im ersten Schritt soll eine Anwendung entwickelt werden, die einen Kühlschrank mit Internet Anbindung simuliert. 
-Der Kühlschrank arbeitet als Server und soll mit Hilfe von Sockets von einem einfachen Client angesprochen werden 
-und für insgesamt 5 Artikel den aktuellen „Füllstand“ angeben. Jeder Kühlschrank hat zu jedem Zeitpunkt 
-die vorhandene Menge aller Artikel. Die Menge jedes Artikels im Kühlschrank soll sich nach einem zu bestimmenden Zeitintervall reduzieren,
-so dass irgendwann der Kühlschrank leer ist. Das heißt, es müssen Sensoren simuliert werden, die den Füllstand "messen" 
-und eine "Zentrale", die alle Messungen sammelt und mit dem Besitzer des Kühlschranks kommuniziert._
+# Aufgabe 2
+_Die zweite Aufgabe besteht darin, in den Kühlschrank einen Webserver zu integrieren. 
+Der Webserver soll mit einem beliebigen Browser (Chrome, Firefox, Internet Explorer, Safari, etc.) 
+angesprochen werden können und jeweils eine einfache HTML Seite mit einer Übersicht über 
+die im Kühlschrank befindliche Menge von jeweils 5 Artikeln an den Browser schicken_
 
-*In dieser Aufgabe (und in Aufgabe 2) soll alle Kommunikation mittel Sockets erfolgen. Java oder C++ sind erlaubte Programmiersprachen.*
-*Die Sensoren verwenden .DP, um deren Messungen an die Zentrale zu schicken. Die Zentrale soll sowohl 
-die aktuell vorhandene Menge eines einzelnen Artikels, wie auch die Historie des Füllstandes ausgeben.*
+* Dieser Webserver soll mit TCP Sockets realisiert werden - und nicht etwa mit fertigen Webserver- Klassen aus Bibliotheken. *
+* Die Sensoren aus Aufgabe 1 müssen weiter laufen. Das heißt, dass die "Zentrale" gleichzeitig 
+mit den Sensoren als auch mit Browser (HTTP Klienten) in Kontakt bleiben soll. *
 
 ----------------------------------------------------------------------------------
 
@@ -18,7 +16,7 @@ die aktuell vorhandene Menge eines einzelnen Artikels, wie auch die Historie des
 * Then clone Project on brach step1.
 
 ```
-$ git clone -b step1 https://github.com/zigfrid100/verteilte_systeme_ws17-18.git
+$ git clone -b step2 https://github.com/zigfrid100/verteilte_systeme_ws17-18.git
 ```
 * Don't forget change IP-Address by Client 
 

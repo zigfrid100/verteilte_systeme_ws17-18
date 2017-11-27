@@ -24,7 +24,7 @@ public class UDPSocketClient {
     private byte[] buf = new byte[1024];
     private byte[] incomingData = new byte[1024];
     /** InetAdress String */
-    private String ipAddresString = "141.100.42.159";
+    private String ipAddresString = "192.168.178.39";
     private String ipAddresLocalhostString = "localhost";
     private String answerFromServer;
 
