@@ -14,7 +14,7 @@ import java.net.*;
 public class UDPSocketClient {
 
     /** The UDP port the client connects to. */
-    private static int PORT = 8181;
+    private static int SERVER_PORT = 8181;
 
     /** The UDP socket used to send data. */
     private DatagramSocket udpSocket;
@@ -43,7 +43,7 @@ public class UDPSocketClient {
     /**
      * Method that transmits a String message via the UDP socket.
      */
-    public void sendMsg(Product product)  throws IOException {
+    public void sendMsg(Product product)  throws IOException,InterruptedException {
         ByteArrayOutputStream bStream = new ByteArrayOutputStream();
         ObjectOutput oo = new ObjectOutputStream(bStream);
 
@@ -53,7 +53,7 @@ public class UDPSocketClient {
         // Convert the message into a byte-array.
         buf = bStream.toByteArray();
         // Create a new UDP packet with the byte-array as payload.
-        DatagramPacket sendPacket  = new DatagramPacket(buf, buf.length, address, PORT);
+        DatagramPacket sendPacket  = new DatagramPacket(buf, buf.length, address, SERVER_PORT);
         DatagramPacket incomingPacket = new DatagramPacket(incomingData,incomingData.length);
         // Send the data.
         try {
@@ -61,7 +61,8 @@ public class UDPSocketClient {
             udpSocket.send(sendPacket);
 
             //check if server available
-            udpSocket.setSoTimeout(5000);
+           // udpSocket.setSoTimeout(2000);
+
             udpSocket.receive(incomingPacket);
             //write answer counter
             this.answerFromServer = new String(incomingPacket.getData());

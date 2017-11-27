@@ -1,12 +1,19 @@
 package de.hda.fbi.ds.ks;
 
 
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.io.*;
 import java.util.*;
+
+// erste test ist mit status 200 oder 400
+// kann farbe als test sein?
 
 /**
  * Created by zigfrid on 13.11.17.
@@ -15,8 +22,7 @@ public class UDPSocketServer {
 
 
     /** The UDP port the server listens to. */
-    private static int PORT = 8181;
-
+    private static int SERVER_PORT = 8181;
     /** The UDP socket used to receive data. */
     private DatagramSocket udpSocket;
     /** States the server running. */
@@ -30,6 +36,12 @@ public class UDPSocketServer {
     private static List<SensorData> actualSensorDatas = new ArrayList<SensorData>();
     /** counter for received packets */
     private int receivedPacketsCounter = 0;
+    /** TCP Socket for HTTP */
+    private ServerSocket serverSocket;
+    /** The UDP port the server listens to. */
+    private static int PORT_WEB = 8282;
+    /** Socket for Web */
+    private Socket socket;
 
     /**
      * Default constructor that creates, i.e., opens
@@ -38,8 +50,11 @@ public class UDPSocketServer {
      * @throws IOException In case the socket cannot be created.
      */
     public UDPSocketServer() throws IOException {
-        udpSocket = new DatagramSocket( PORT );
-        System.out.println("Started the UDP socket server at port " + PORT);
+        udpSocket = new DatagramSocket( SERVER_PORT );
+        serverSocket = new ServerSocket( PORT_WEB);
+        System.out.println("Started the UDP socket server at port " + SERVER_PORT);
+        System.out.println("Started the WebServer at port " + PORT_WEB);
+
     }
 
     /**
@@ -52,13 +67,139 @@ public class UDPSocketServer {
             try {
                 // Receive message
                 udpSocket.receive(udpPacket);
+
+                //connection accept TCP
+                socket = serverSocket.accept();
+
                 //Print some packet data.
                 savePaketdata(udpPacket);
+
+                //print by server console
                 printActualSensorData();
+
+                //start Web Server
+                showWeb();
             } catch (IOException e) {
                 System.out.println("Could not receive datagram.\n" + e.getLocalizedMessage());
             }
         }
+    }
+
+    /**
+     * generete Page for WebClient
+     *
+     * @throws IOException
+     */
+    private void showWeb() throws IOException{
+
+        InputStream inputStream;
+        BufferedReader bufferedReader;
+        PrintWriter out;
+        String request;
+        String response;
+        String[] requestParam;
+        String path;
+        String message = "Don't have a Products";
+        String historyURL = "/history";
+        String listURL = "/list";
+        String testBadURL = "/testError";
+        String topic ="";
+        //For test Status
+        String httpStatus = "";
+
+        try{
+            inputStream = socket.getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            request = bufferedReader.readLine();
+            if(!request.isEmpty()){
+                requestParam = request.split(" ");
+                path = requestParam[1];
+                System.out.println(path);
+                if(path.equals(historyURL)){
+                    message = makeOneStringHistory();
+                    httpStatus = "HTTP/1.1 200";
+                    topic = "History of products : ";
+                }
+                if(path.equals(listURL)){
+                    message = makeOneStringList();
+                    httpStatus = "HTTP/1.1 200";
+                    topic = "List of products : ";
+                }
+                /** if path not equals /list or /history will be BAD REQUEST with status 400 */
+                if(!path.equals(listURL) && !path.equals(historyURL)){
+                    message = "<h1 style='color:red'style='color:red'> BAD REQUEST, ALLOWED ONLY HTTP GET /list or /history REQUESTS </h1>";
+                    httpStatus = "HTTP/1.1 400";
+                    topic = "<h1 style='color:red'> ERROR </h1>";
+                }
+
+            }
+
+            out = new PrintWriter(socket.getOutputStream());
+            out.println(httpStatus);
+            out.println("Content-type: text/html");
+            out.println("Server-name: myServer");
+            response = "<html> <meta http-equiv='refresh' content='1'/>"
+                    + "<meta charset='utf-8'/>" // Umlauts
+                    + "<link rel=\"icon\" href=\"data:;base64,iVBORw0KGgo=\">" // How to prevent favicon.ico requests?
+                    + "<head>"
+                    + "<h1>Your request: " + request + "</h3>"
+                    + "<table width=\"200\">"
+                    + "<td><h3><a href=\"/list \">list</a></h3></td>"
+                    + "<td><h3><a href=\"/history \">history</a></h3></td>"
+                    + "<td><h3><a href=\"/testError \">testError</a></h3></td>"
+                    + "</table>"
+                    + "<title>My Web Server</title></head>"
+                    + "<h1>" + topic + "</h1>"
+                    + "<table width=\"200\">"
+                    + "<h3>" + message + "</h3>"
+                    + "</table>"
+                    + "</html>";
+            out.println("Content-length: " + response.length());
+            out.println("");
+            out.println(response);
+            out.flush();
+            //out.close();
+            //bufferedReader.close();
+        }
+        catch (IOException e)
+        {
+            System.out.println("Failed respond to client request: " + e.getMessage());
+        }
+
+    }
+
+    /**
+     * generate String for webServer
+     * for path /list
+     * */
+    private String makeOneStringList(){
+        String result = "";
+
+        for(int i = 0 ; i < actualSensorDatas.size() ; i++ ){
+            if(actualSensorDatas.get(i).getProduct().getValueOfProduct() == 0){
+                result = result + "<tr> <td><h3 style='color:red'>" +actualSensorDatas.get(i).getProduct().getNameOfProduct() + ": </h3></td>  <td><h3 style='color:red'> " + actualSensorDatas.get(i).getProduct().getValueOfProduct() + "</h3> </td> </tr>";
+            }else{
+            result = result + "<tr> <td><h3 style='color:blue'>" +actualSensorDatas.get(i).getProduct().getNameOfProduct() + ": </h3></td>  <td><h3 style='color:blue'> " + actualSensorDatas.get(i).getProduct().getValueOfProduct() + "</h3> </td> </tr>";
+            }
+        }
+        return result;
+    }
+    /**
+     * generate String for webServer
+     * for path /history
+     * */
+    private String makeOneStringHistory(){
+        String result = "";
+
+        for(int i = 0 ; i < sensorDatas.size() ; i++ ){
+            if(sensorDatas.get(i).getProduct().getValueOfProduct() == 0){
+                result = result + "<tr> <td><h3 style='color:red'>" +sensorDatas.get(i).getProduct().getNameOfProduct() + " : </h3></td>  <td><h3 style='color:red'> " + sensorDatas.get(i).getProduct().getValueOfProduct()  + "</h3> </td> </tr> ";
+
+            }else{
+            result = result + " <tr> <td><h3 style='color:blue'>" +sensorDatas.get(i).getProduct().getNameOfProduct() + " : </h3></td>  <td><h3 style='color:blue'> " + sensorDatas.get(i).getProduct().getValueOfProduct()  + "</h3> </td> </tr>";
+            }
+        }
+        return result;
     }
 
     private void sendAnswer(SensorData sensorData) throws IOException{
@@ -114,11 +255,13 @@ public class UDPSocketServer {
     /** Prints actual SensorData to standard out.*/
     private void printActualSensorData() throws IOException , InterruptedException{
 
+        System.out.println("*----------------------------");
         for (SensorData sensorData : actualSensorDatas) {
             System.out.println("Received a packet: IP:Port: " + sensorData.printSensorData());
         }
-            Thread.sleep(2000);
-            System.out.print("\033[H\033[2J");
+            //Thread.sleep(10000);
+            //System.out.print("\033[H\033[2J");
+        System.out.println("----------------------------*");
 
     }
 

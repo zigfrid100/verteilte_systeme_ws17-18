@@ -62,6 +62,7 @@ public class Main {
 
                         // Send the message.
                         for (int i = 0 ; i <= myProduct.getValueOfProduct();){
+                            Thread.sleep(4000);
                             udpSocketClient.sendMsg(myProduct);
                             myProduct.reduce();
 
