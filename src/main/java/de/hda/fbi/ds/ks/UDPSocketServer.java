@@ -138,17 +138,17 @@ public class UDPSocketServer {
             out.println(httpStatus);
             out.println("Content-type: text/html");
             out.println("Server-name: myServer");
-            response = "<html> <meta http-equiv='refresh' content='1'/>"
+            response = "<html>" + "<head>"
+                    + "<meta http-equiv='refresh' content='1'/>"
                     + "<meta charset='utf-8'/>" // Umlauts
                     + "<link rel=\"icon\" href=\"data:;base64,iVBORw0KGgo=\">" // How to prevent favicon.ico requests?
-                    + "<head>"
+                    + "<title>My Web Server</title></head>"
                     + "<h1>Your request: " + request + "</h3>"
                     + "<table width=\"200\">"
                     + "<td><h3><a href=\"/list \">list</a></h3></td>"
                     + "<td><h3><a href=\"/history \">history</a></h3></td>"
                     + "<td><h3><a href=\"/testError \">testError</a></h3></td>"
                     + "</table>"
-                    + "<title>My Web Server</title></head>"
                     + "<h1>" + topic + "</h1>"
                     + "<table width=\"200\">"
                     + "<h3>" + message + "</h3>"
