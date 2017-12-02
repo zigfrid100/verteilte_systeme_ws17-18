@@ -25,7 +25,16 @@ public class Main {
         System.out.println("|        2. Start Client   |");
         System.out.println("|        3. Exit           |");
         System.out.println("============================");
-        choice = Keyin.inInt(" Select option: ");
+
+
+        if(args.length == 0){
+            /** Normally use choice input*/
+            choice = Keyin.inInt(" Select option: ");
+        }else{
+            /**choice for test, with use the bash scripts*/
+            choice = Integer.parseInt(args[0]);
+        }
+
 
         // Switch construct
         switch (choice) {

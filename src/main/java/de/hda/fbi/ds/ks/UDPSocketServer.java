@@ -1,7 +1,6 @@
 package de.hda.fbi.ds.ks;
 
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -12,8 +11,10 @@ import java.net.Socket;
 import java.io.*;
 import java.util.*;
 
-// erste test ist mit status 200 oder 400
-// kann farbe als test sein?
+// erste test ist mit status 200 oder 400 - done
+// anfragen viel - done
+// kann farbe - done
+// anzeigen list - done
 
 /**
  * Created by zigfrid on 13.11.17.
@@ -127,16 +128,21 @@ public class UDPSocketServer {
                     httpStatus = "HTTP/1.1 200";
                     topic = "List of products : ";
                     pathForRefresh = listURL;
+                    /** compare Data from actualSensorData with response Data */
+                    testShowList(message);
                 }
                 /** if path not equals /list or /history will be BAD REQUEST with status 400 */
                 if(!path.equals(listURL) && !path.equals(historyURL)){
-                    message = "<h1 style='color:red'style='color:red'> BAD REQUEST, ALLOWED ONLY HTTP GET /list or /history REQUESTS </h1>";
+                    message = "<h1 style='color:red'> BAD REQUEST, ALLOWED ONLY HTTP GET /list or /history REQUESTS </h1>";
                     httpStatus = "HTTP/1.1 400";
                     topic = "<h1 style='color:red'> ERROR </h1>";
                     pathForRefresh = testBadURL;
                 }
 
             }
+
+            /** Color test */
+            testColor(message,httpStatus);
 
             out = new PrintWriter(socket.getOutputStream());
             out.println(httpStatus);
@@ -173,6 +179,59 @@ public class UDPSocketServer {
     }
 
     /**
+     * compare Data from actualSensorData with response Data
+     * */
+    void testShowList(String message){
+
+        if(message.length() != 0){
+            String[] chekingString = message.split(";");
+            for (int i = 0 ; i < actualSensorDatas.size();i++){
+                String[] chekingInString = chekingString[i].split(" ");
+                if(actualSensorDatas.get(i).getProduct().getNameOfProduct().equals(chekingInString[3])
+                        && actualSensorDatas.get(i).getProduct().getValueOfProduct() == Integer.parseInt(chekingInString[chekingInString.length-1])){
+                    System.out.println("Product name from actualData: >"
+                            + actualSensorDatas.get(i).getProduct().getNameOfProduct()
+                            + "< is same with Product name from request messege >" + chekingInString[3]
+                            + "< and Product value from actualData: >" + actualSensorDatas.get(i).getProduct().getValueOfProduct()
+                            + "< is same with Product value from request message >" + chekingInString[chekingInString.length-1] + "<");
+                }else{
+                    System.out.println("Product name from actualData: >"
+                            + actualSensorDatas.get(i).getProduct().getNameOfProduct()
+                            + "< is NOT same with Product name from request messege >" + chekingInString[3]
+                            + "< and Product value from actualData: >" + actualSensorDatas.get(i).getProduct().getValueOfProduct()
+                            + "< is NOT same with Product value from request message >" + chekingInString[chekingInString.length-1] + "<");
+                }
+            }
+        }
+    }
+
+    /**
+     *  Color test
+     *  Search style color red/blue and value of Product and then compare >0 or ==0
+     * */
+    void testColor(String message,String httpStatus){
+        String styleColorRed = "style='color:red'";
+        String styleColorBlue = "style='color:blue'";
+
+        if(httpStatus.equals("HTTP/1.1 200") && message.length() != 0){
+            String[] chekingString = message.split(";");
+            if(chekingString.length > 0){
+                for(int i = 0 ; i < chekingString.length - 1; i++ ){
+                    System.out.println(chekingString[i]);
+                    String[] chekingInString = chekingString[i].split(" ");
+                    /** Search style color red/blue and value of Product and then compare >0 or ==0 */
+                    if(chekingString[i].contains(styleColorBlue) && Integer.parseInt(chekingInString[chekingInString.length-1]) > 0){
+                        System.out.println("By value "  + chekingInString[chekingInString.length-1] + " is " + styleColorBlue );
+                    }
+                    if(chekingString[i].contains(styleColorRed) && Integer.parseInt(chekingInString[chekingInString.length-1]) == 0){
+                        System.out.println("By value "  + chekingInString[chekingInString.length-1] + " is " + styleColorRed );
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * generate String for webServer
      * for path /list
      * */
@@ -181,9 +240,9 @@ public class UDPSocketServer {
 
         for(int i = 0 ; i < actualSensorDatas.size() ; i++ ){
             if(actualSensorDatas.get(i).getProduct().getValueOfProduct() == 0){
-                result = result + "<tr> <td><h3 style='color:red'>" +actualSensorDatas.get(i).getProduct().getNameOfProduct() + ": </h3></td>  <td><h3 style='color:red'> " + actualSensorDatas.get(i).getProduct().getValueOfProduct() + "</h3> </td> </tr>";
+                result = result + "<tr><td><h3 style='color:red' > " + actualSensorDatas.get(i).getProduct().getNameOfProduct() + " </h3></td><td><h3 style='color:red'> " + actualSensorDatas.get(i).getProduct().getValueOfProduct() + " ;</h3></td></tr>";
             }else{
-            result = result + "<tr> <td><h3 style='color:blue'>" +actualSensorDatas.get(i).getProduct().getNameOfProduct() + ": </h3></td>  <td><h3 style='color:blue'> " + actualSensorDatas.get(i).getProduct().getValueOfProduct() + "</h3> </td> </tr>";
+            result = result + "<tr><td><h3 style='color:blue' > " + actualSensorDatas.get(i).getProduct().getNameOfProduct() + " </h3></td><td><h3 style='color:blue' > " + actualSensorDatas.get(i).getProduct().getValueOfProduct() + " ;</h3></td></tr>";
             }
         }
         return result;
@@ -197,10 +256,10 @@ public class UDPSocketServer {
 
         for(int i = 0 ; i < sensorDatas.size() ; i++ ){
             if(sensorDatas.get(i).getProduct().getValueOfProduct() == 0){
-                result = result + "<tr> <td><h3 style='color:red'>" +sensorDatas.get(i).getProduct().getNameOfProduct() + " : </h3></td>  <td><h3 style='color:red'> " + sensorDatas.get(i).getProduct().getValueOfProduct()  + "</h3> </td> </tr> ";
+                result = result + "<tr><td><h3 style='color:red' > " +sensorDatas.get(i).getProduct().getNameOfProduct() + " </h3></td><td><h3 style='color:red' > " + sensorDatas.get(i).getProduct().getValueOfProduct()  + " ;</h3></td></tr>";
 
             }else{
-            result = result + " <tr> <td><h3 style='color:blue'>" +sensorDatas.get(i).getProduct().getNameOfProduct() + " : </h3></td>  <td><h3 style='color:blue'> " + sensorDatas.get(i).getProduct().getValueOfProduct()  + "</h3> </td> </tr>";
+            result = result + " <tr><td><h3 style='color:blue' > " +sensorDatas.get(i).getProduct().getNameOfProduct() + " </h3></td><td><h3 style='color:blue' > " + sensorDatas.get(i).getProduct().getValueOfProduct()  + " ;</h3></td></tr>";
             }
         }
         return result;
