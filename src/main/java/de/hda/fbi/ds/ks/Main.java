@@ -16,18 +16,17 @@ public class Main {
         int choice;
         String packetsToSend;
 
-        // Display menu graphics
-        System.out.println("============================");
-        System.out.println("|     MENU SMART FRIDGE    |");
-        System.out.println("============================");
-        System.out.println("| Options:                 |");
-        System.out.println("|        1. Start Server   |");
-        System.out.println("|        2. Start Client   |");
-        System.out.println("|        3. Exit           |");
-        System.out.println("============================");
-
-
         if(args.length == 0){
+            // Display menu graphics
+            System.out.println("============================");
+            System.out.println("|     MENU SMART FRIDGE    |");
+            System.out.println("============================");
+            System.out.println("| Options:                 |");
+            System.out.println("|        1. Start Server   |");
+            System.out.println("|        2. Start Client   |");
+            System.out.println("|        3. Exit           |");
+            System.out.println("============================");
+
             /** Normally use choice input*/
             choice = Keyin.inInt(" Select option: ");
         }else{

@@ -9,7 +9,7 @@ die im Kühlschrank befindliche Menge von jeweils 5 Artikeln an den Browser schi
 mit den Sensoren als auch mit Browser (HTTP Klienten) in Kontakt bleiben soll. *
 
 ----------------------------------------------------------------------------------
-
+######
 ## For Compile and Start: 
 
 * You need is Maven and Java 8 JDK install.
@@ -19,12 +19,13 @@ mit den Sensoren als auch mit Browser (HTTP Klienten) in Kontakt bleiben soll. *
 $ git clone -b step2 https://github.com/zigfrid100/verteilte_systeme_ws17-18.git
 ```
 * Don't forget change IP-Address by Client 
-
+######
 ## Compile
 ```
 $ mvn clean package 
 ```
 in the Project directory
+######
 ## Usage
 ```
 $ cd "Project-Directory"/target/classes 
@@ -32,3 +33,13 @@ $ java de/hda/fbi/ds/ks/Main
 ```
 * Choice in Menu Server(1) or Client(2) or Exit(3).
 * The server runs forever. You may terminate the server by pressing Ctrl + x. 
+* Webserver support Google Chrome and Safari.
+######
+## Testing capacity of Server: 
+
+```
+$ cd "Project-Directory"/src/main/bash
+$ ./start-udp-socket-server.sh  
+$ ./start-udp-socket-client-sensor.sh "value of clients"
+```
+* Don't forget chmod u+x "name of bash file"
