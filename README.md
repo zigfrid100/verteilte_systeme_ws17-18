@@ -1,4 +1,4 @@
-# Aufgabe 2
+# Aufgabe 3
 _In der dritten Aufgabe soll eine RPC Anbindung des Kühlschranks an ein Gesch ft mittels Apache Thrift 
 implementiert werden. Wenn die Menge eines der 5 Artikel im Kühlschrank unter einen zuvor festgelegten 
 Schwellwert sinkt, soll der Kühlschrank über die Thrift Schnittstelle selbst ndig beim Gesch ft den Artikel 
