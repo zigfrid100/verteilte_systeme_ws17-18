@@ -1,12 +1,14 @@
 # Aufgabe 2
-_Die zweite Aufgabe besteht darin, in den Kühlschrank einen Webserver zu integrieren. 
-Der Webserver soll mit einem beliebigen Browser (Chrome, Firefox, Internet Explorer, Safari, etc.) 
-angesprochen werden können und jeweils eine einfache HTML Seite mit einer Übersicht über 
-die im Kühlschrank befindliche Menge von jeweils 5 Artikeln an den Browser schicken_
+_In der dritten Aufgabe soll eine RPC Anbindung des Kühlschranks an ein Gesch ft mittels Apache Thrift 
+implementiert werden. Wenn die Menge eines der 5 Artikel im Kühlschrank unter einen zuvor festgelegten 
+Schwellwert sinkt, soll der Kühlschrank über die Thrift Schnittstelle selbst ndig beim Gesch ft den Artikel 
+nachbestellen. Über die Schnittstelle soll es msglich sein, Artikel nachzubestellen und zu beliebigen 
+Zeitpunkten Rechnungen über die bisher get tigten Bestellungen anzufordern. Artikel haben neben einem Namen 
+auch Preise für eine bestimmte Menge, z.B. €/100g. Der Webserver im Kühlschrank soll dabei so erweitert werden, 
+dass eine Nachbestellung auch manuell über einen Webbrowser erfolgen kann, wenn ausreichend Platz vorhanden ist._
 
-* Dieser Webserver soll mit TCP Sockets realisiert werden - und nicht etwa mit fertigen Webserver- Klassen aus Bibliotheken. *
-* Die Sensoren aus Aufgabe 1 müssen weiter laufen. Das heißt, dass die "Zentrale" gleichzeitig 
-mit den Sensoren als auch mit Browser (HTTP Klienten) in Kontakt bleiben soll. *
+* Hinweis: Wie erfahren die Sensoren, dass ein Artikel geliefert wurde? Das soll simuliert werden -- genau wie das erfolgen sollte, ist ein "Design-Decision", die Sie treffen sollen. *
+* Für diese Aufgabe muss nur ein Gesch ft simuliert werden, aber dieses Gesch ft soll mehr als ein Kühlschrank bedienen. *
 
 ----------------------------------------------------------------------------------
 ######

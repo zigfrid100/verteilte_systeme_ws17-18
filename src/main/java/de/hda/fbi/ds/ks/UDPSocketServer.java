@@ -129,7 +129,7 @@ public class UDPSocketServer {
                     topic = "List of products : ";
                     pathForRefresh = listURL;
                     /** compare Data from actualSensorData with response Data */
-                    testShowList(message);
+                    //testShowList(message);
                 }
                 /** if path not equals /list or /history will be BAD REQUEST with status 400 */
                 if(!path.equals(listURL) && !path.equals(historyURL)){
@@ -142,7 +142,7 @@ public class UDPSocketServer {
             }
 
             /** Color test */
-            testColor(message,httpStatus);
+            //testColor(message,httpStatus);
 
             out = new PrintWriter(socket.getOutputStream());
             out.println(httpStatus);
