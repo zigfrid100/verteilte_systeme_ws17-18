@@ -10,11 +10,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.*;
 import java.util.*;
+import org.apache.thrift.TException;
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.protocol.TProtocol;
+import org.apache.thrift.transport.TSocket;
+import org.apache.thrift.transport.TTransport;
 
-// erste test ist mit status 200 oder 400 - done
-// anfragen viel - done
-// kann farbe - done
-// anzeigen list - done
 
 /**
  * Created by zigfrid on 13.11.17.
