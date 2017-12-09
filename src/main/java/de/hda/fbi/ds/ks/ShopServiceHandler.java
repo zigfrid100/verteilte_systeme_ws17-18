@@ -1,5 +1,6 @@
 package de.hda.fbi.ds.ks;
 
+import de.hda.fbi.ds.myShopService.ShopService;
 import org.apache.thrift.TException;
 import java.lang.*;
 import java.util.*;
@@ -8,8 +9,8 @@ import java.util.Random;
 /**
  * Created by zigfrid on 09.12.17.
  */
-public class ShopServiceHandler /*implements ShopService.Iface*/{
-/*
+public class ShopServiceHandler implements ShopService.Iface{
+
     List<String> history = new ArrayList<String>();
 
 
@@ -32,6 +33,6 @@ public class ShopServiceHandler /*implements ShopService.Iface*/{
         System.out.println("Client buy: " + value +" "+ name  +  "  and pay " + price*value + " money.");
         history.add("Client buy: " + value +" "+ name  +  "  and pay " + price*value + " money.");
         return value;
-    }*/
+    }
 
 }

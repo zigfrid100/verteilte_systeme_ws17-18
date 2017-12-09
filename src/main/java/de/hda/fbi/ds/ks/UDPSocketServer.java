@@ -8,11 +8,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.*;
 import java.util.*;
+
+import de.hda.fbi.ds.myShopService.ShopService;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
+
 
 //import myShopService.*;
 /**
@@ -83,24 +86,29 @@ public class UDPSocketServer {
 
                 //start Web Server
                 showWeb();
+
+                //test thrift
+                makeOrder();
+
             } catch (IOException e) {
                 System.out.println("Could not receive datagram.\n" + e.getLocalizedMessage());
             }
         }
     }
-/*
-    // Wahrscheinlich muss Rückwert als Product sein
+
+    // Wahrscheinlich muss Rückgabewert als Product sein
     private void makeOrder(){
         try (TTransport transport = new TSocket(HOST_THRIFT, PORT_THRIFT)){
             transport.open();
             TProtocol protocol = new TBinaryProtocol(transport);
-            ShopSecvice.Client client = new ShopSecvice.Client(protocol);
-            System.out.println("add result:" + client.getPriceByName("TEST"));
+            //ShopSecvice.Client client = new ShopSecvice.Client(protocol);
+            ShopService.Client client = new ShopService.Client(protocol);
+            System.out.println("add result:" + client.hello("TEST"));
         } catch (TException x) {
             x.printStackTrace();
         }
     }
-*/
+
     /**
      * generete Page for WebClient
      *

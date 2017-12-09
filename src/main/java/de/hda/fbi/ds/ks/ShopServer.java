@@ -1,4 +1,5 @@
 package de.hda.fbi.ds.ks;
+import de.hda.fbi.ds.myShopService.ShopService;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.server.TServer;
@@ -9,7 +10,7 @@ import org.apache.thrift.server.TSimpleServer;
  * Created by zigfrid on 09.12.17.
  */
 public class ShopServer {
-/*
+
     public static void StartsimpleServer(ShopService.Processor<ShopServiceHandler> processor) {
 
         try {
@@ -28,5 +29,5 @@ public class ShopServer {
     public static void main(String[] args) {
         StartsimpleServer(new ShopService.Processor<ShopServiceHandler>(new ShopServiceHandler()));
     }
-*/
+
 }
