@@ -1,7 +1,5 @@
 package de.hda.fbi.ds.ks;
 
-
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -16,7 +14,7 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 
-
+//import myShopService.*;
 /**
  * Created by zigfrid on 13.11.17.
  */
@@ -44,6 +42,10 @@ public class UDPSocketServer {
     private static int PORT_WEB = 8282;
     /** Socket for Web */
     private Socket socket;
+    /** The port the client connects to. */
+    public static final int PORT_THRIFT = 9090;
+    /** The host the client connects to. */
+    public static final String HOST_THRIFT = "localhost";
 
     /**
      * Default constructor that creates, i.e., opens
@@ -86,7 +88,19 @@ public class UDPSocketServer {
             }
         }
     }
-
+/*
+    // Wahrscheinlich muss Rückwert als Product sein
+    private void makeOrder(){
+        try (TTransport transport = new TSocket(HOST_THRIFT, PORT_THRIFT)){
+            transport.open();
+            TProtocol protocol = new TBinaryProtocol(transport);
+            ShopSecvice.Client client = new ShopSecvice.Client(protocol);
+            System.out.println("add result:" + client.getPriceByName("TEST"));
+        } catch (TException x) {
+            x.printStackTrace();
+        }
+    }
+*/
     /**
      * generete Page for WebClient
      *

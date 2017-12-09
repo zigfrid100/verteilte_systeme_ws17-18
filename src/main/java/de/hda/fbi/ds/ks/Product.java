@@ -42,19 +42,19 @@ public class Product implements Serializable{
         return nameOfProduct + " " + valueOfProduct;
     }
 
-    int getValueOfProduct(){
+    public int getValueOfProduct(){
         return valueOfProduct;
     }
 
-    String getNameOfProduct(){
+    public String getNameOfProduct(){
         return nameOfProduct;
     }
 
-    void setNameOfProduct(String name){
+    public void setNameOfProduct(String name){
         nameOfProduct = name;
     }
 
-    void setValueOfProduct(int value){
+    public void setValueOfProduct(int value){
         valueOfProduct = value;
     }
 

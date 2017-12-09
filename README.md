@@ -45,3 +45,10 @@ $ ./start-udp-socket-server.sh
 $ ./start-udp-socket-client-sensor.sh "value of clients"
 ```
 * Don't forget chmod u+x "name of bash file"
+
+
+######
+in folder de.hda.fbi.ds.ks 
+```
+$ thrift -gen java shop.thrift
+```
